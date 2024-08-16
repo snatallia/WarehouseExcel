@@ -30,13 +30,14 @@
         {
             btnExcel = new Button();
             label1 = new Label();
-            lblText = new Label();
             lblProduct = new Label();
+            dgvProducts = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
             SuspendLayout();
             // 
             // btnExcel
             // 
-            btnExcel.Location = new Point(66, 100);
+            btnExcel.Location = new Point(594, 38);
             btnExcel.Name = "btnExcel";
             btnExcel.Size = new Size(395, 58);
             btnExcel.TabIndex = 0;
@@ -53,35 +54,39 @@
             label1.TabIndex = 1;
             label1.Text = "Выберите файл со списком товаров";
             // 
-            // lblText
-            // 
-            lblText.AutoSize = true;
-            lblText.ForeColor = Color.Red;
-            lblText.Location = new Point(66, 182);
-            lblText.Name = "lblText";
-            lblText.Size = new Size(412, 41);
-            lblText.TabIndex = 2;
-            lblText.Text = "Менее приоритетный товар:";
-            // 
             // lblProduct
             // 
             lblProduct.AutoSize = true;
-            lblProduct.Location = new Point(484, 182);
+            lblProduct.Font = new Font("Segoe UI", 12F);
+            lblProduct.Location = new Point(54, 108);
             lblProduct.Name = "lblProduct";
-            lblProduct.Size = new Size(0, 41);
+            lblProduct.Size = new Size(0, 54);
             lblProduct.TabIndex = 3;
+            // 
+            // dgvProducts
+            // 
+            dgvProducts.AllowUserToAddRows = false;
+            dgvProducts.AllowUserToDeleteRows = false;
+            dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvProducts.Location = new Point(81, 225);
+            dgvProducts.Name = "dgvProducts";
+            dgvProducts.ReadOnly = true;
+            dgvProducts.RowHeadersWidth = 102;
+            dgvProducts.Size = new Size(1510, 820);
+            dgvProducts.TabIndex = 4;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1864, 987);
+            ClientSize = new Size(1698, 1071);
+            Controls.Add(dgvProducts);
             Controls.Add(lblProduct);
-            Controls.Add(lblText);
             Controls.Add(label1);
             Controls.Add(btnExcel);
             Name = "MainForm";
             Text = "Excel form";
+            ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -90,7 +95,7 @@
 
         private Button btnExcel;
         private Label label1;
-        private Label lblText;
         private Label lblProduct;
+        private DataGridView dgvProducts;
     }
 }

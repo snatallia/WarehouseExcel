@@ -1,6 +1,3 @@
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.Office.Interop.Excel;
 using System.Globalization;
 using WarehouseExcel.Model;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -13,20 +10,41 @@ namespace WarehouseExcel
 
         public MainForm()
         {
-            InitializeComponent();
+            InitializeComponent();     
         }
 
         private void btnExcel_Click(object sender, EventArgs e)
         {
-            ClearForm();
-            string fileName;
-            SelectExcelFileForReading(out fileName);
-            ReadExcel(fileName);
-            products.Sort();
-            lblProduct.Text = $" аталог: {products[0].Catalog};  атегори€: {products[0].Category} ({products[0].DateExp}, " +
-                $"{products[0].Priority}, {products[0].DateIn})";
+
+            try
+            {
+                string fileName;
+                SelectExcelFileForReading(out fileName);
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    return;
+                }
+                ClearForm();
+                ReadExcel(fileName);
+                GridViewInit();
+                products.Sort();
+                lblProduct.Text = $"ћенее приоритетный товар:  аталог: {products[0].Catalog};  атегори€: {products[0].Category}";
+            }
+            catch (Exception ex)
+            {
+                lblProduct.Text = ex.Message;
+            }
         }
 
+        //инициализаци€ данными таблицы на форме
+        private void GridViewInit()
+        {
+            dgvProducts.Columns.Clear();
+            dgvProducts.AutoGenerateColumns = true;
+            dgvProducts.DataSource = products.ToArray();
+        }
+
+        //выбор excel файла
         private static void SelectExcelFileForReading(out string fileName)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -41,6 +59,7 @@ namespace WarehouseExcel
             }
         }
 
+        //чтение excel файла
         private void ReadExcel(string fileName)
         {
             var excelApp = new Excel.Application();
@@ -53,17 +72,18 @@ namespace WarehouseExcel
             int rowCount = excelRange.Rows.Count;
             int columnCount = excelRange.Columns.Count;
 
-            //чтение строк из таблицы
+            //чтение строк из таблицы, начина€ со второй
             for (int i = 2; i <= rowCount; i++)
             {
                 AddProductToList(excelRange, i);
             }
-
-
+            
+            //завершаем работу с excel
             workbook.Close(false);
             excelApp.Quit();
         }
 
+        //создание списка продуктов
         private void AddProductToList(Excel.Range excelRange, int i)
         {
             var product = new Product
@@ -78,6 +98,7 @@ namespace WarehouseExcel
             products.Add(product);
         }
 
+        //чтени€ даты в зависимости от формата
         private DateTime? GetDateByText(string text, string[] formats)
         {
             DateTime date;           
@@ -86,10 +107,11 @@ namespace WarehouseExcel
             return (isValidDateTime)? date : null;
         }
 
+        //очистка данных
         private void ClearForm()
         {
             products.Clear();
-            lblProduct.Text = "";
+            lblProduct.Text = string.Empty;
         }
     }
 }
